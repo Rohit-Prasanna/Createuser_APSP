@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Registration</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+
+        #registration-form-container {
+            max-width: 400px;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        #error-message {
+            color: red;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="registration-form-container">
+        <h2>User Registration</h2>
+        <form id="registration-form">
+            <label for="email">New Email:</label>
+            <input type="email" id="email" placeholder="name@apsp.com" required>
+            <br>
+            <label for="password">New Password:</label>
+            <input type="password" id="password" required>
+            <br>
+            <button type="button" onclick="registerUser()">Register</button>
+        </form>
+        <p id="error-message"></p>
+    </div>
+
+
+
+    <script defer src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+
+    <script defer src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+
+    <script>
+        var firebaseConfig = {
+            apiKey: "AIzaSyCml75hS01lTpIb411zccQZZ2y24bb_dfk",
+            authDomain: "apsp-20c59.firebaseapp.com",
+            databaseURL: "https://apsp-20c59-default-rtdb.firebaseio.com",
+            projectId: "apsp-20c59",
+            storageBucket: "apsp-20c59.appspot.com",
+            messagingSenderId: "491378219179",
+            appId: "1:491378219179:web:4c9c8ac6719e23f422ffee",
+            measurementId: "G-33BLEDZ3TP"
+        };
+
+        function registerUser() {
+            firebase.initializeApp(firebaseConfig);
+
+            var email = document.getElementById('email').value;
+            var password = document.getElementById('password').value;
+
+            firebase.auth().createUserWithEmailAndPassword(email, password)
+                .then((userCredential) => {
+                    console.log('User registered:', userCredential.user);
+                    document.getElementById('error-message').innerText = '';
+                    showSuccessMessage('User registered successfully!\n this tab will be closing automatically after 5 s with your confirmation ');
+                    document.getElementById('email').value = '';
+                    document.getElementById('password').value = '';
+                })
+                .catch((error) => {
+                    var errorCode = error.code;
+                    var errorMessage = error.message;
+                    console.error('Registration error:', errorCode, errorMessage);
+                    document.getElementById('error-message').innerText = errorMessage;
+                });
+        }
+
+        function showSuccessMessage(message) {
+            alert(message);
+
+            setTimeout(function () {
+                window.close();
+            }, 5000);
+        }
+
+
+    </script>
+</body>
+
+</html>
